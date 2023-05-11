@@ -1,0 +1,1 @@
+CreateConVar( "glacebase_debug", 0, FCVAR_NONE, "Enables debug mode", 0, 1 )
