@@ -488,7 +488,7 @@ function GLACEBASE:ApplyPlayerFunctions( ply )
             end
         end
 
-        -- Gets a random position within the distance
+        -- Gets a random position within the distance. Depending on navmesh size and how often this function runs, this can severely lag the game
         function GLACE:GetRandomPos( dist, pos )
             pos = pos or self:GetPos()
             dist = dist or 1500
@@ -496,14 +496,32 @@ function GLACEBASE:ApplyPlayerFunctions( ply )
             local areas = {}
 
             for k, nav in ipairs( navareas ) do
-                if IsValid( nav ) and nav:GetSizeX() > 60 and nav:GetSizeY() > 60 and pos:DistToSqr( nav:GetClosestPointOnArea( pos ) ) < ( dist * dist ) then
+                if IsValid( nav ) and nav:GetSizeX() > 60 and nav:GetSizeY() > 60 and pos:DistToSqr( nav:GetClosestPointOnArea( pos ) ) < dist ^ 2 then
                     areas[ #areas + 1 ] = nav
                 end
             end
             
-            for k, v in RandomPairs( areas ) do
-                if IsValid( v ) then return v:GetRandomPoint() end
+            local area = areas[ math.random( #areas ) ] 
+            local pos = IsValid( area ) and area:GetRandomPoint() or pos
+        end
+
+        -- Gets a random position. This caches the nav area result for faster runs
+        function GLACE:GetRandomPosCache()
+            if !GLACEBASE.NavAreaCache then
+                local navareas = navmesh.GetAllNavAreas()
+                GLACEBASE.NavAreaCache = {}
+    
+                for k, nav in ipairs( navareas ) do
+                    if IsValid( nav ) and nav:GetSizeX() > 60 and nav:GetSizeY() > 60 then
+                        GLACEBASE.NavAreaCache[ #GLACEBASE.NavAreaCache + 1 ] = nav
+                    end
+                end
             end
+
+            
+            local area = GLACEBASE.NavAreaCache[ math.random( #GLACEBASE.NavAreaCache ) ] 
+            local pos = IsValid( area ) and area:GetRandomPoint() or self:GetPos()
+            return pos
         end
 
         local cooldown = 0
