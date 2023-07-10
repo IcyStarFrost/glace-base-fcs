@@ -42,6 +42,13 @@ local defaultnames = {
 function GLACEBASE:CreatePlayer( plyname, playermodel )
     if player.GetCount() == game.MaxPlayers() then print( "Glace Base: No more player bots can be spawned. (Player Limit Reached!)" ) return end
     local ply = player.CreateNextBot( plyname or defaultnames[ math.random( #defaultnames ) ] )
+
+    if playermodel == "random" then
+        local mdls = player_manager.AllValidModels()
+        local seq = table.ClearKeys( mdls )
+        playermodel = seq[ math.random( #seq ) ]
+    end
+
     if playermodel then ply:SetModel( playermodel ) end
 
     ply.gb_playermodel = playermodel
@@ -80,9 +87,12 @@ function GLACEBASE:CreatePlayer( plyname, playermodel )
         if !initspawn then GLACE:OnRespawn() end
         initspawn = false
 
-        if ply.gb_playermodel then 
-            ply:SetModel( ply.gb_playermodel )
-        end
+        -- To make sure models are set
+        GLACE:SimpleTimer( 0, function()
+            if ply.gb_playermodel then 
+                ply:SetModel( ply.gb_playermodel )
+            end
+        end )
     end )
 
     -- On Killed hook
