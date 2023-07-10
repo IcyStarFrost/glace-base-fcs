@@ -532,7 +532,7 @@ function GLACEBASE:ApplyPlayerFunctions( ply )
             local mins = Vector( -16, -16, -10 )
             local maxs = Vector( 16, 16, 10 )
 
-            tracetable.start = self:WorldSpaceCenter() + self:GetRight() * 20
+            tracetable.start = self:GetPos() + Vector( 0, 0, self:GetStepSize() ) + self:GetRight() * 20
             tracetable.endpos = tracetable.start 
             tracetable.mins = mins
             tracetable.maxs = maxs
@@ -541,7 +541,7 @@ function GLACEBASE:ApplyPlayerFunctions( ply )
             debugoverlay.Box( tracetable.start, tracetable.mins, tracetable.maxs, 0.1, rightcol )
             local rightresult = TraceHull( tracetable )
 
-            tracetable.start = self:WorldSpaceCenter() - self:GetRight() * 20
+            tracetable.start = self:GetPos() + Vector( 0, 0, self:GetStepSize() ) - self:GetRight() * 20
             tracetable.endpos = tracetable.start 
             tracetable.mins = mins
             tracetable.maxs = maxs
@@ -558,7 +558,6 @@ function GLACEBASE:ApplyPlayerFunctions( ply )
 
             local righthit = rightresult.Hit
             local lefthit = leftresult.Hit
-
 
             -- Something is blocking our lower body.. Jump
             if righthit and lefthit and !eyeresult.Hit then
