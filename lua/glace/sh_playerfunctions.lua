@@ -114,9 +114,10 @@ function GLACEBASE:ApplyPlayerFunctions( ply )
             if self.gb_keypresscooldowns[ inkey ] and CurTime() < self.gb_keypresscooldowns[ inkey ] then return end -- Cooldown
             if bit.band( self.gb_buttonqueue, inkey ) == inkey then return end -- Prevent the same key from being queued
             self.gb_buttonqueue = self.gb_buttonqueue + inkey
+
             GLACE.gb_movementinputforward = inkey == IN_FORWARD and ( self:IsSprinting() and self:GetRunSpeed() or self:GetWalkSpeed() ) or inkey == IN_BACK and ( self:IsSprinting() and -self:GetRunSpeed() or -self:GetWalkSpeed() )
             GLACE.gb_movementinputside = inkey == IN_MOVERIGHT and ( self:IsSprinting() and self:GetRunSpeed() or self:GetWalkSpeed() ) or inkey == IN_MOVELEFT and ( self:IsSprinting() and -self:GetRunSpeed() or -self:GetWalkSpeed() )
-            self.gb_keypresscooldowns[ inkey ] = CurTime() + 0.001
+            self.gb_keypresscooldowns[ inkey ] = CurTime() + engine.TickInterval()
         end
 
         -- Pretty much the same above except there is no delay which means this can be run every tick and simulate a held key
