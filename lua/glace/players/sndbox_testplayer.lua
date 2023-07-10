@@ -17,7 +17,7 @@ local function CreateTestPlayer()
     -- When they see a NPC, they will instantly start attacking
     -- And lastly, when they get low on health and there's a medkit nearby, go to it
 
-    local GLACE = GLACEBASE:CreatePlayer() 
+    local GLACE = GLACEBASE:CreatePlayer( nil, "models/player/barney.mdl" )   
     
 
     GLACE:SetSprint( true ) -- Always Sprint
