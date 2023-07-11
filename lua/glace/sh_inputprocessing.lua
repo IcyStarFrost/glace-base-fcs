@@ -11,7 +11,7 @@ hook.Add( "StartCommand", "GlaceBase-InputProcessing", function( ply, cmd )
 
     local buttonqueue = GLACE.gb_buttonqueue
 
-    if GLACE:IsSprinting() then buttonqueue = buttonqueue + IN_SPEED end
+    if GLACE.gb_sprint then buttonqueue = buttonqueue + IN_SPEED end
     if buttonqueue > 0 then
         cmd:SetButtons( buttonqueue )
         GLACE.gb_buttonqueue = 0
