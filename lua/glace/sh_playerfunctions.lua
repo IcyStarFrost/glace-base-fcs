@@ -489,20 +489,13 @@ function GLACEBASE:ApplyPlayerFunctions( ply )
             end
         end
 
-        -- Gets a random position within the distance. Depending on navmesh size and how often this function runs, this can severely lag the game
+        -- Gets a random position within the distance.
         function GLACE:GetRandomPos( dist, pos )
             pos = pos or self:GetPos()
             dist = dist or 1500
-            local navareas = navmesh.GetAllNavAreas()
-            local areas = {}
-
-            for k, nav in ipairs( navareas ) do
-                if IsValid( nav ) and nav:GetSizeX() > 60 and nav:GetSizeY() > 60 and pos:DistToSqr( nav:GetClosestPointOnArea( pos ) ) < dist ^ 2 then
-                    areas[ #areas + 1 ] = nav
-                end
-            end
+            local navareas = navmesh.Find( pos, dist, 100, self:GetStepSize() )
             
-            local area = areas[ math.random( #areas ) ] 
+            local area = navareas[ math.random( #navareas ) ] 
             local pos = IsValid( area ) and area:GetRandomPoint() or pos
         end
 

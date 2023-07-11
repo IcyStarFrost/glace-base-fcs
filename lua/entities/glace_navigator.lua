@@ -41,7 +41,7 @@ function ENT:PathToPos()
     self._PATH = Path( "Follow" )
     self._PATH:SetMinLookAheadDistance( 10 )
 	self._PATH:SetGoalTolerance( GLACE.gb_goaltolerance or 20 )
-	self._PATH:Compute( self, self:TranslateGoal() )
+	self._PATH:Compute( self, self:TranslateGoal(), GLACE:PathfindingGenerator() )
     self.gb_CurrentSeg = 1
 
     if !self._PATH:IsValid() then GLACE.gb_pathgenerating = false return end
@@ -52,7 +52,7 @@ function ENT:PathToPos()
         if ( isentity( self.gb_GoalPosition ) and !IsValid( self.gb_GoalPosition ) ) or !self.gb_GoalPosition then break end
 
         if GetConVar( "developer" ):GetBool() then self._PATH:Draw() end
-        if self.gb_forcerecompute then self._PATH:Compute( self, self:TranslateGoal() ) self.gb_CurrentSeg = 1 self.gb_forcerecompute = false end
+        if self.gb_forcerecompute then self._PATH:Compute( self, self:TranslateGoal(), GLACE:PathfindingGenerator() ) self.gb_CurrentSeg = 1 self.gb_forcerecompute = false end
 
         self._PATH:MoveCursorToClosestPosition( GLACE:GetPos() )
 
